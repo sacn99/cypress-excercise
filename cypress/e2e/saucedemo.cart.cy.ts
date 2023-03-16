@@ -1,3 +1,4 @@
+
 import { LoginPage, InventoryPage } from "../pages";
 
 const loginPage = new LoginPage();
