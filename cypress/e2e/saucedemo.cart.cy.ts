@@ -1,3 +1,8 @@
+import { LoginPage, InventoryPage } from "../pages";
+
+const loginPage = new LoginPage();
+const inventoryPage = new InventoryPage();
+
 describe("Verify product selection for SauceDemo", () => {
     beforeEach(() => {
       cy.visit("https://www.saucedemo.com/");
@@ -5,21 +10,20 @@ describe("Verify product selection for SauceDemo", () => {
 
     it("Sauce Labs Backpack and Onesie would be added to the shopping cart", () => {
       cy.visit("https://www.saucedemo.com/");
-      cy.get('[data-test="username"]').type("standard_user");
-      cy.get('[data-test="password"]').type("secret_sauce");
-      cy.get('[data-test="login-button"]').click();
+      
+      loginPage.login("standard_user","secret_sauce");
 
       // Assertion that verifies that product list is displayed
-      cy.get(".title").should("have.text", "Products");
-      cy.get('[data-test="add-to-cart-sauce-labs-onesie"]').click();
-      cy.get('[data-test="add-to-cart-sauce-labs-backpack"]').click();
-      
+       inventoryPage.getTitle().should("have.text", "Products");
+
+       inventoryPage.addToCartProduct1();
+       inventoryPage.addToCartProduct2();      
 
       //Assertion that confirme the products previously added are listed
-      cy.get('[data-test="remove-sauce-labs-onesie"]').should("be.visible");
-      cy.get('[data-test="remove-sauce-labs-backpack"]').should("be.visible");
-      cy.get('.shopping_cart_badge').should("have.text",2);
-      cy.get('.shopping_cart_link').click();
+      inventoryPage.removeFromCartProduct1().should("be.visible");
+      inventoryPage.removeFromCartProduct2().should("be.visible");
+      inventoryPage.getCartBadge().should("have.text",2);
+      inventoryPage.getCart();
 
       //Assertion that checks if the correct products have been clicked
       cy.get('.inventory_item_name').should("contain","Sauce Labs Onesie");
